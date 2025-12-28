@@ -1,0 +1,80 @@
+{
+    "name": "nphuonha/filament-helpdesk",
+    "description": ":package_description",
+    "keywords": [
+        "nphuonha",
+        "laravel",
+        "filament-helpdesk"
+    ],
+    "homepage": "https://github.com/nphuonha2101/filament-helpdesk",
+    "support": {
+        "issues": "https://github.com/nphuonha2101/filament-helpdesk/issues",
+        "source": "https://github.com/nphuonha2101/filament-helpdesk"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Phuong Nha Nguyen",
+            "email": "phuongnhanguyen.dev@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "filament/filament": "^4.0",
+        "filament/forms": "^4.0",
+        "filament/tables": "^4.0",
+        "spatie/laravel-package-tools": "^1.15.0",
+        "webklex/laravel-imap": "^5.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.9",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^8.0",
+        "pestphp/pest": "^2.1",
+        "pestphp/pest-plugin-arch": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nphuonha\\FilamentHelpdesk\\": "src/",
+            "Nphuonha\\FilamentHelpdesk\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nphuonha\\FilamentHelpdesk\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nphuonha\\FilamentHelpdesk\\FilamentHelpdeskServiceProvider"
+            ],
+            "aliases": {
+                "Skeleton": "Nphuonha\\FilamentHelpdesk\\Facades\\Skeleton"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
