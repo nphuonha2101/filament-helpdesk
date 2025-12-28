@@ -22,17 +22,22 @@ class EmailTemplateResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('subject_template')
-                    ->required()
-                    ->maxLength(255)
-                    ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
-                Forms\Components\Textarea::make('body_template')
-                    ->required()
-                    ->rows(10)
-                    ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.'),
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('subject_template')
+                            ->required()
+                            ->maxLength(255)
+                            ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
+                        Forms\Components\Textarea::make('body_template')
+                            ->required()
+                            ->rows(10)
+                            ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
             ]);
     }
 

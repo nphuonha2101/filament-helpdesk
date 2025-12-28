@@ -22,18 +22,27 @@ class TicketResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('subject')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('status')
-                    ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketStatus::class)
-                    ->required(),
-                Forms\Components\Select::make('priority')
-                    ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
-                    ->required(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(255),
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('subject')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                        
+                        Forms\Components\Select::make('status')
+                            ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketStatus::class)
+                            ->required(),
+                            
+                        Forms\Components\Select::make('priority')
+                            ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
+                            ->required(),
+
+                        Forms\Components\TextInput::make('email')
+                            ->email()
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
             ]);
     }
 
