@@ -5,7 +5,7 @@ namespace Nphuonha\FilamentHelpdesk\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum TicketStatus: string implements HasLabel, HasColor
+enum TicketStatus: string implements HasColor, HasLabel
 {
     case Open = 'open';
     case Pending = 'pending';

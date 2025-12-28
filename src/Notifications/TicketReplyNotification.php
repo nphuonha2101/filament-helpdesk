@@ -6,9 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
 use Nphuonha\FilamentHelpdesk\Models\TicketMessage;
-use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 
 class TicketReplyNotification extends Notification implements ShouldQueue
 {
@@ -29,12 +29,12 @@ class TicketReplyNotification extends Notification implements ShouldQueue
         // Try to find a template (e.g. 'ticket_reply')
         $template = EmailTemplate::where('name', 'ticket_reply')->first();
 
-        $subject = $template 
-            ? $this->replacePlaceholders($template->subject_template) 
+        $subject = $template
+            ? $this->replacePlaceholders($template->subject_template)
             : "Re: [#{$this->ticket->id}] {$this->ticket->subject}";
 
-        $body = $template 
-            ? $this->replacePlaceholders($template->body_template) 
+        $body = $template
+            ? $this->replacePlaceholders($template->body_template)
             : $this->message->body;
 
         return (new MailMessage)

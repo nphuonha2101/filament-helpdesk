@@ -2,13 +2,13 @@
 
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
-use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource\Pages;
-use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource\Pages;
+use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 
 class EmailTemplateResource extends Resource
 {

@@ -2,9 +2,9 @@
 
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
 
-use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 
 class EditTicket extends EditRecord
 {

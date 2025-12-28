@@ -2,9 +2,8 @@
 
 namespace Nphuonha\FilamentHelpdesk\Services;
 
-use Nphuonha\FilamentHelpdesk\Models\Ticket;
-use Nphuonha\FilamentHelpdesk\Models\TicketMessage;
 use Illuminate\Support\Str;
+use Nphuonha\FilamentHelpdesk\Models\Ticket;
 
 class TicketService
 {
@@ -22,7 +21,7 @@ class TicketService
         $userModel = config('auth.providers.users.model', \App\Models\User::class);
         $user = $userModel::where('email', $email)->first();
 
-        if (!$ticket) {
+        if (! $ticket) {
             $ticket = Ticket::create([
                 'uuid' => (string) Str::uuid(),
                 'user_id' => $user?->id,

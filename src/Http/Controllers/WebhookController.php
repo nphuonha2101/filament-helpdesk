@@ -15,7 +15,7 @@ class WebhookController extends Controller
         $sender = $request->input('sender');
         $subject = $request->input('subject');
         $body = $request->input('body-plain');
-        
+
         // Handle attachments if any
         $attachments = [];
 
