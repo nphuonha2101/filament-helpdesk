@@ -2,9 +2,9 @@
 
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource\Pages;
 
-use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource;
 
 class EditEmailTemplate extends EditRecord
 {

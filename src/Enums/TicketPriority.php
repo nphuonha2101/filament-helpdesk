@@ -5,7 +5,7 @@ namespace Nphuonha\FilamentHelpdesk\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum TicketPriority: string implements HasLabel, HasColor
+enum TicketPriority: string implements HasColor, HasLabel
 {
     case Low = 'low';
     case Normal = 'normal';

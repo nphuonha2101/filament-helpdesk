@@ -6,11 +6,11 @@ use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 class SubmitTicket extends Component implements HasForms
 {
@@ -30,7 +30,7 @@ class SubmitTicket extends Component implements HasForms
             ->schema([
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->required(fn () => !Auth::check())
+                    ->required(fn () => ! Auth::check())
                     ->hidden(fn () => Auth::check())
                     ->maxLength(255),
                 Forms\Components\TextInput::make('subject')
@@ -77,7 +77,7 @@ class SubmitTicket extends Component implements HasForms
         ]);
 
         $this->form->fill();
-        
+
         session()->flash('message', 'Ticket submitted successfully!');
     }
 

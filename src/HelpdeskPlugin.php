@@ -4,8 +4,8 @@ namespace Nphuonha\FilamentHelpdesk;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 
 class HelpdeskPlugin implements Plugin
 {

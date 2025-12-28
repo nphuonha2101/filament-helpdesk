@@ -2,9 +2,9 @@
 
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
 
-use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Str;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource;
 
 class CreateTicket extends CreateRecord
 {
@@ -13,7 +13,7 @@ class CreateTicket extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['uuid'] = (string) Str::uuid();
-        
+
         return $data;
     }
 }

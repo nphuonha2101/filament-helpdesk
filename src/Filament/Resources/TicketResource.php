@@ -2,13 +2,13 @@
 
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
-use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
-use Nphuonha\FilamentHelpdesk\Models\Ticket;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
+use Nphuonha\FilamentHelpdesk\Models\Ticket;
 
 class TicketResource extends Resource
 {
