@@ -1,6 +1,6 @@
 {
     "name": "nphuonha/filament-helpdesk",
-    "description": ":package_description",
+    "description": "A helpdesk package for FilamentPHP.",
     "keywords": [
         "nphuonha",
         "laravel",
