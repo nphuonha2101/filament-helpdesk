@@ -28,11 +28,11 @@ class TicketResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
-                        
+
                         Forms\Components\Select::make('status')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketStatus::class)
                             ->required(),
-                            
+
                         Forms\Components\Select::make('priority')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
                             ->required(),
