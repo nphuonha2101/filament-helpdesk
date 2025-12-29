@@ -68,10 +68,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nphuonha\\FilamentHelpdesk\\FilamentHelpdeskServiceProvider"
+                "Nphuonha\\FilamentHelpdesk\\HelpdeskServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Nphuonha\\FilamentHelpdesk\\Facades\\Skeleton"
+                "Helpdesk": "Nphuonha\\FilamentHelpdesk\\Facades\\Helpdesk"
             }
         }
     },
