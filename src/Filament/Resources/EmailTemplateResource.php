@@ -14,9 +14,15 @@ class EmailTemplateResource extends Resource
 {
     protected static ?string $model = EmailTemplate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    public static function getNavigationIcon(): ?string
+    {
+        return 'heroicon-o-document-text';
+    }
 
-    protected static ?string $navigationGroup = 'Helpdesk';
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Helpdesk';
+    }
 
     public static function form(Form $form): Form
     {
