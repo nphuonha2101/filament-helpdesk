@@ -3,7 +3,8 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,15 +15,21 @@ class EmailTemplateResource extends Resource
 {
     protected static ?string $model = EmailTemplate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
-    protected static ?string $navigationGroup = 'Helpdesk';
-
-    public static function form(Form $form): Form
+    public static function getNavigationIcon(): ?string
     {
-        return $form
+        return 'heroicon-o-document-text';
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Helpdesk';
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
             ->schema([
-                Forms\Components\Section::make()
+                Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()

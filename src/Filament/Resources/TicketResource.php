@@ -3,7 +3,8 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,15 +15,21 @@ class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-ticket';
-
-    protected static ?string $navigationGroup = 'Helpdesk';
-
-    public static function form(Form $form): Form
+    public static function getNavigationIcon(): ?string
     {
-        return $form
+        return 'heroicon-o-ticket';
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Helpdesk';
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
             ->schema([
-                Forms\Components\Section::make()
+                Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('subject')
                             ->required()
