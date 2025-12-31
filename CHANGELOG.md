@@ -2,7 +2,7 @@
 
 All notable changes to `nphuonha/filament-helpdesk` will be documented in this file.
 
-## 1.1.0 - 2025-12-31
+## 1.1.0-Alpha 1 - 2025-12-31
 
 ### Added
 - **Dynamic Sender:** Added `received_at_email` to tickets table to track which email address received the ticket.
