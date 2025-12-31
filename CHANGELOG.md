@@ -5,6 +5,7 @@ All notable changes to `nphuonha/filament-helpdesk` will be documented in this f
 ## Unreleased
 
 ### Added
+- **Filament v4 Support:** Compatible with Filament v4.
 - **Dynamic Sender:** Added `received_at_email` to tickets table to track which email address received the ticket.
 - **Agent Assignment:** Added `assigned_to_user_id` to tickets table to assign tickets to specific agents.
 - **Channel Tracking:** Added `channel` column to tickets table (web, imap, webhook).
@@ -26,6 +27,10 @@ All notable changes to `nphuonha/filament-helpdesk` will be documented in this f
 - Added `mailer` to `config/filament-helpdesk.php`.
 - Added `webhook.mailgun_secret` and `webhook.ses_secret` to `config/filament-helpdesk.php`.
 
-## 0.x.x - Alpha R
+## v2.0.0-Alpha - 2025-12-31
 
-- initial release
+- First release (Alpha) for Filament v4.
+
+## v1.0.0-Alpha - 2025-12-31
+
+- First version (Alpha) for Filament v3
