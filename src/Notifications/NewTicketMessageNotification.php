@@ -26,6 +26,7 @@ class NewTicketMessageNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
+            ->mailer(config('filament-helpdesk.mailer'))
             ->subject("New reply on ticket [#{$this->ticket->id}]")
             ->line("A new reply has been posted on ticket #{$this->ticket->id}: {$this->ticket->subject}")
             ->line("From: {$this->ticket->email}")

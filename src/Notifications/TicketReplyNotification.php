@@ -37,10 +37,14 @@ class TicketReplyNotification extends Notification implements ShouldQueue
             ? $this->replacePlaceholders($template->body_template)
             : $this->message->body;
 
-        $fromEmail = $this->ticket->received_at_email ?? config('mail.from.address');
+        $fromEmail = config('filament-helpdesk.enable_dynamic_sender') && $this->ticket->received_at_email
+            ? $this->ticket->received_at_email
+            : config('mail.from.address');
+
         $fromName = config('mail.from.name');
 
         return (new MailMessage)
+            ->mailer(config('filament-helpdesk.mailer'))
             ->from($fromEmail, $fromName)
             ->subject($subject)
             ->line($body)
