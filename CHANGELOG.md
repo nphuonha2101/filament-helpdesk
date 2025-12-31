@@ -2,7 +2,7 @@
 
 All notable changes to `nphuonha/filament-helpdesk` will be documented in this file.
 
-## Unreleased
+## v2.1.0-Alpha 1 - 2025-12-31
 
 ### Added
 - **Filament v4 Support:** Compatible with Filament v4.
