@@ -19,7 +19,7 @@ class WebhookController extends Controller
         // Handle attachments if any
         $attachments = [];
 
-        $ticketService->processIncomingMessage($sender, $subject, $body, $attachments);
+        $ticketService->processIncomingMessage($sender, $subject, $body, $attachments, null, null, 'webhook');
 
         return response()->json(['status' => 'ok']);
     }

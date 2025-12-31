@@ -62,7 +62,8 @@ class FetchMailCommand extends Command
                     $body,
                     $attachments,
                     $messageId,
-                    $to
+                    $to,
+                    'imap'
                 );
 
                 $message->setFlag('Seen');

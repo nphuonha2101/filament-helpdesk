@@ -8,7 +8,7 @@ use Nphuonha\FilamentHelpdesk\Notifications\NewTicketMessageNotification;
 
 class TicketService
 {
-    public function processIncomingMessage(string $email, string $subject, string $body, array $attachments = [], ?string $messageId = null, ?string $receivedAtEmail = null): Ticket
+    public function processIncomingMessage(string $email, string $subject, string $body, array $attachments = [], ?string $messageId = null, ?string $receivedAtEmail = null, string $channel = 'web'): Ticket
     {
         // Try to find ticket ID in subject like [#123]
         preg_match('/\[#(\d+)\]/', $subject, $matches);
@@ -31,6 +31,7 @@ class TicketService
                 'subject' => $subject,
                 'status' => \Nphuonha\FilamentHelpdesk\Enums\TicketStatus::Open,
                 'priority' => \Nphuonha\FilamentHelpdesk\Enums\TicketPriority::Normal,
+                'channel' => $channel,
             ]);
         } else {
             // Re-open ticket if it was closed

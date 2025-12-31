@@ -22,6 +22,7 @@ class Ticket extends Model
         'subject',
         'status',
         'priority',
+        'channel',
     ];
 
     protected $casts = [
@@ -41,6 +42,6 @@ class Ticket extends Model
 
     public function assignedTo(): BelongsTo
     {
-        return $this->belongsTo(config('filament-helpdesk.user_model', \App\Models\User::class), 'assigned_to_user_id');
+        return $this->belongsTo(config('filament-helpdesk.agent_model', \App\Models\User::class), 'assigned_to_user_id');
     }
 }

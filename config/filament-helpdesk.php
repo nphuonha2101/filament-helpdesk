@@ -15,5 +15,6 @@ return [
         'enabled' => env('HELPDESK_WEBHOOK_ENABLED', false),
         'secret' => env('HELPDESK_WEBHOOK_SECRET'),
     ],
-    'user_model' => \App\Models\User::class,
+    'user_model' => \App\Models\User::class, // Model cho khách hàng (người tạo ticket)
+    'agent_model' => \App\Models\User::class, // Model cho nhân viên support (người xử lý ticket)
 ];
