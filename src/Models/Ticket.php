@@ -16,10 +16,13 @@ class Ticket extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'assigned_to_user_id',
         'email',
+        'received_at_email',
         'subject',
         'status',
         'priority',
+        'channel',
     ];
 
     protected $casts = [
@@ -34,6 +37,11 @@ class Ticket extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(config('auth.providers.users.model', \App\Models\User::class));
+        return $this->belongsTo(config('filament-helpdesk.user_model', \App\Models\User::class));
+    }
+
+    public function assignedTo(): BelongsTo
+    {
+        return $this->belongsTo(config('filament-helpdesk.agent_model', \App\Models\User::class), 'assigned_to_user_id');
     }
 }

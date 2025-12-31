@@ -2,23 +2,24 @@
 
 namespace Workbench\App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Nphuonha\FilamentHelpdesk\HelpdeskPlugin;
 
-class WorkbenchServiceProvider extends ServiceProvider
+class WorkbenchServiceProvider extends PanelProvider
 {
-    /**
-     * Register services.
-     */
-    public function register(): void
+    public function panel(Panel ): Panel
     {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
+        return 
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->login()
+            ->colors([
+                'primary' => \Filament\Support\Colors\Color::Amber,
+            ])
+            ->plugins([
+                new HelpdeskPlugin(),
+            ]);
     }
 }

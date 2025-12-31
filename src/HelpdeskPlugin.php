@@ -16,6 +16,7 @@ class HelpdeskPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
+        // dd('Plugin Registered');
         $panel
             ->resources([
                 TicketResource::class,

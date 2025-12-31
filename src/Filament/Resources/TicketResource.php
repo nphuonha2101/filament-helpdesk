@@ -47,6 +47,11 @@ class TicketResource extends Resource
                             ->required()
                             ->columnSpanFull(),
 
+                        Forms\Components\Select::make('assigned_to_user_id')
+                            ->relationship('assignedTo', 'name')
+                            ->searchable()
+                            ->preload(),
+
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->maxLength(255)
@@ -66,6 +71,9 @@ class TicketResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('priority')
                     ->badge(),
+                Tables\Columns\TextColumn::make('assignedTo.name')
+                    ->label('Assigned To')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -74,10 +82,26 @@ class TicketResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('assigned_to_user_id')
+                    ->relationship('assignedTo', 'name')
+                    ->label('Assigned To')
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\Filter::make('my_tickets')
+                    ->label('My Tickets')
+                    ->query(fn ($query) => $query->where('assigned_to_user_id', auth()->id())),
             ])
             ->actions([
+<<<<<<< HEAD
                 Actions\EditAction::make(),
+=======
+                Tables\Actions\Action::make('assign_to_me')
+                    ->label('Assign to Me')
+                    ->icon('heroicon-o-user')
+                    ->action(fn (Ticket $record) => $record->update(['assigned_to_user_id' => auth()->id()]))
+                    ->visible(fn (Ticket $record) => $record->assigned_to_user_id !== auth()->id()),
+                Tables\Actions\EditAction::make(),
+>>>>>>> feature/assign-ticket-supporter
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([

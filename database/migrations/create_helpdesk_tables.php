@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('uuid')->unique()->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('email')->nullable();
+            $table->string('received_at_email')->nullable();
             $table->string('subject');
             $table->string('status')->default('open');
             $table->string('priority')->default('normal');
