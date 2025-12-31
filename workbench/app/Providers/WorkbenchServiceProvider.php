@@ -8,9 +8,9 @@ use Nphuonha\FilamentHelpdesk\HelpdeskPlugin;
 
 class WorkbenchServiceProvider extends PanelProvider
 {
-    public function panel(Panel ): Panel
+    public function panel(Panel $panel): Panel
     {
-        return 
+        return $panel 
             ->default()
             ->id('admin')
             ->path('admin')
