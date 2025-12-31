@@ -152,6 +152,7 @@ class HelpdeskServiceProvider extends PackageServiceProvider
     {
         return [
             'create_helpdesk_tables',
+            'add_assigned_to_user_id_to_helpdesk_tickets_table',
         ];
     }
 }

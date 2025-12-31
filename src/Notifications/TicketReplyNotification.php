@@ -37,7 +37,11 @@ class TicketReplyNotification extends Notification implements ShouldQueue
             ? $this->replacePlaceholders($template->body_template)
             : $this->message->body;
 
+        $fromEmail = $this->ticket->received_at_email ?? config('mail.from.address');
+        $fromName = config('mail.from.name');
+
         return (new MailMessage)
+            ->from($fromEmail, $fromName)
             ->subject($subject)
             ->line($body)
             ->action('View Ticket', url('/helpdesk/tickets/' . $this->ticket->uuid));

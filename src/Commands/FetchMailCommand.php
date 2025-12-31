@@ -40,6 +40,7 @@ class FetchMailCommand extends Command
 
             foreach ($messages as $message) {
                 $from = $message->getFrom()[0]->mail;
+                $to = $message->getTo()[0]->mail ?? null;
                 $subject = $message->getSubject();
                 $body = $message->getTextBody() ?: $message->getHTMLBody();
                 $messageId = $message->getMessageId();
@@ -60,7 +61,8 @@ class FetchMailCommand extends Command
                     $subject,
                     $body,
                     $attachments,
-                    $messageId
+                    $messageId,
+                    $to
                 );
 
                 $message->setFlag('Seen');
