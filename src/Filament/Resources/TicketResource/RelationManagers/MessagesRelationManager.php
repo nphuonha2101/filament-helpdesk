@@ -3,9 +3,10 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Actions;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -15,9 +16,9 @@ class MessagesRelationManager extends RelationManager
 {
     protected static string $relationship = 'messages';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\Textarea::make('body')
                     ->required()
@@ -49,7 +50,7 @@ class MessagesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                Actions\CreateAction::make()
                     ->label('Reply')
                     ->after(function ($record) {
                         // Send notification to the ticket owner
@@ -63,8 +64,8 @@ class MessagesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+                // Actions\EditAction::make(),
+                // Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 //

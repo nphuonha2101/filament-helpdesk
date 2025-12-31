@@ -7,6 +7,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
 use Filament\Tables\Table;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
@@ -38,11 +39,13 @@ class TicketResource extends Resource
 
                         Forms\Components\Select::make('status')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketStatus::class)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
 
                         Forms\Components\Select::make('priority')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('email')
                             ->email()
@@ -74,11 +77,11 @@ class TicketResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
