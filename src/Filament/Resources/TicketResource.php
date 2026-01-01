@@ -92,12 +92,12 @@ class TicketResource extends Resource
                     ->query(fn ($query) => $query->where('assigned_to_user_id', auth()->id())),
             ])
             ->actions([
-                Tables\Actions\Action::make('assign_to_me')
+                Actions\Action::make('assign_to_me')
                     ->label('Assign to Me')
                     ->icon('heroicon-o-user')
                     ->action(fn (Ticket $record) => $record->update(['assigned_to_user_id' => auth()->id()]))
                     ->visible(fn (Ticket $record) => $record->assigned_to_user_id !== auth()->id()),
-                Tables\Actions\EditAction::make(),
+                Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
