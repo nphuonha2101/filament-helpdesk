@@ -31,8 +31,8 @@ class TicketService
             return \Nphuonha\FilamentHelpdesk\Models\TicketMessage::where('message_id', $messageId)->first()->ticket;
         }
 
-        // Try to find ticket ID in subject like [#123]
-        preg_match('/\[#(\d+)\]/', $subject, $matches);
+        // Try to find ticket ID in subject like [#123] or [123]
+        preg_match('/\[#?(\d+)\]/', $subject, $matches);
         $ticketId = $matches[1] ?? null;
 
         // Try to find parent via In-Reply-To

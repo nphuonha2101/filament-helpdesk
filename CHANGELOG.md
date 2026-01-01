@@ -2,6 +2,12 @@
 
 All notable changes to `nphuonha/filament-helpdesk` will be documented in this file.
 
+## v2.1.5 - 2026-01-01
+
+### Fixed
+- Fixed email threading regex to support both `[#123]` and `[123]` formats in subject lines.
+- Email replies with format "Re: Subject [1]" now correctly thread to existing tickets instead of creating duplicates.
+
 ## v2.1.4 - 2026-01-01
 
 ### Fixed
