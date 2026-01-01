@@ -30,10 +30,16 @@ class MessagesRelationManager extends RelationManager
                     ->placeholder('Select a template (optional)')
                     ->columnSpanFull()
                     ->live()
-                    ->afterStateUpdated(function ($state, Set $set) {
+                    ->afterStateUpdated(function ($state, Set $set, $livewire) {
                         $template = EmailTemplate::find($state);
                         if ($template) {
-                            $set('body', $template->body_template);
+                            $ticket = $livewire->getOwnerRecord();
+                            $body = str_replace(
+                                ['{ticket_id}', '{subject}', '{status}'],
+                                [$ticket->id, $ticket->subject, $ticket->status->value ?? $ticket->status],
+                                $template->body_template
+                            );
+                            $set('body', $body);
                         }
                     }),
                 Forms\Components\RichEditor::make('body')
@@ -71,12 +77,14 @@ class MessagesRelationManager extends RelationManager
                         // Send notification to the ticket owner
                         $ticket = $record->ticket;
                         
-                        // Template content is already applied to body, so we don't pass template object
+                        $templateId = $data['template_id'] ?? null;
+                        $template = $templateId ? EmailTemplate::find($templateId) : null;
+                        
                         if ($ticket->email) {
                             Notification::route('mail', $ticket->email)
-                                ->notify(new TicketReplyNotification($ticket, $record));
+                                ->notify(new TicketReplyNotification($ticket, $record, $template));
                         } elseif ($ticket->user) {
-                            $ticket->user->notify(new TicketReplyNotification($ticket, $record));
+                            $ticket->user->notify(new TicketReplyNotification($ticket, $record, $template));
                         }
                     }),
             ])

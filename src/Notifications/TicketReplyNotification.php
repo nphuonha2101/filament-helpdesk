@@ -28,16 +28,11 @@ class TicketReplyNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
-        // Use passed template, or try to find default 'ticket_reply'
-        $template = $this->template ?? EmailTemplate::where('name', 'ticket_reply')->first();
-
-        $subject = $template
-            ? $this->replacePlaceholders($template->subject_template)
+        $subject = $this->template
+            ? $this->replacePlaceholders($this->template->subject_template)
             : "Re: [#{$this->ticket->id}] {$this->ticket->subject}";
-
-        $body = $template
-            ? $this->replacePlaceholders($template->body_template)
-            : $this->message->body;
+        
+        $body = $this->message->body;
 
         $fromEmail = config('filament-helpdesk.enable_dynamic_sender') && $this->ticket->received_at_email
             ? $this->ticket->received_at_email
