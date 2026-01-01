@@ -69,8 +69,8 @@ class MessagesRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('email_sent')
                     ->label('Email Status')
                     ->boolean()
-                    ->visible(fn ($record) => $record->is_admin_reply)
-                    ->tooltip(fn ($record) => $record->email_error ?? ($record->email_sent ? 'Sent at ' . $record->email_sent_at?->format('Y-m-d H:i:s') : 'Not sent')),
+                    ->visible(fn ($record) => $record && $record->is_admin_reply)
+                    ->tooltip(fn ($record) => $record ? ($record->email_error ?? ($record->email_sent ? 'Sent at ' . $record->email_sent_at?->format('Y-m-d H:i:s') : 'Not sent')) : ''),
             ])
             ->filters([
                 //
