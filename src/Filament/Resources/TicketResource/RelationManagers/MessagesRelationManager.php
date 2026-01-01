@@ -28,13 +28,12 @@ class MessagesRelationManager extends RelationManager
                     ->preload()
                     ->placeholder('Select a template (optional)')
                     ->columnSpanFull()
-                    ->reactive() // or live()
+                    ->live()
                     ->afterStateUpdated(function ($state, Forms\Set $set) {
-                        // Optional: if you want to pre-fill the body based on template
-                        // $template = EmailTemplate::find($state);
-                        // if ($template) {
-                        //     $set('body', $template->body_template);
-                        // }
+                        $template = EmailTemplate::find($state);
+                        if ($template) {
+                            $set('body', $template->body_template);
+                        }
                     }),
                 Forms\Components\RichEditor::make('body')
                     ->required()
@@ -71,14 +70,12 @@ class MessagesRelationManager extends RelationManager
                         // Send notification to the ticket owner
                         $ticket = $record->ticket;
                         
-                        $templateId = $data['template_id'] ?? null;
-                        $template = $templateId ? EmailTemplate::find($templateId) : null;
-
+                        // Template content is already applied to body, so we don't pass template object
                         if ($ticket->email) {
                             Notification::route('mail', $ticket->email)
-                                ->notify(new TicketReplyNotification($ticket, $record, $template));
+                                ->notify(new TicketReplyNotification($ticket, $record));
                         } elseif ($ticket->user) {
-                            $ticket->user->notify(new TicketReplyNotification($ticket, $record, $template));
+                            $ticket->user->notify(new TicketReplyNotification($ticket, $record));
                         }
                     }),
             ])

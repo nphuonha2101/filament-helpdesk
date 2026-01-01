@@ -18,6 +18,7 @@ class TicketMessage extends Model
         'body',
         'attachments',
         'is_admin_reply',
+        'message_id',
     ];
 
     protected $casts = [

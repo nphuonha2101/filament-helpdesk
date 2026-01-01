@@ -60,7 +60,7 @@ class FetchMailCommand extends Command
                 $remaining = $toProcess - $processed;
                 $currentLimit = min($chunkSize, $remaining);
 
-                $messages = $folder->query()->unseen()->limit($currentLimit)->get();
+                $messages = $folder->query()->unseen()->setFetchOrder('asc')->limit($currentLimit)->get();
 
                 if ($messages->count() === 0) {
                     break;
@@ -85,6 +85,16 @@ class FetchMailCommand extends Command
                             }
                         }
 
+                        $inReplyTo = $message->getInReplyTo();
+                        $references = $message->getReferences();
+                        // Ensure references is an array
+                        if (is_string($references)) {
+                            $references = explode(' ', $references);
+                        }
+                        if (!is_array($references)) {
+                            $references = [];
+                        }
+
                         $ticketService->processIncomingMessage(
                             $from,
                             $subject,
@@ -92,7 +102,9 @@ class FetchMailCommand extends Command
                             $attachments,
                             $messageId,
                             $to,
-                            'imap'
+                            'imap',
+                            $inReplyTo,
+                            $references
                         );
 
                         $message->setFlag('Seen');

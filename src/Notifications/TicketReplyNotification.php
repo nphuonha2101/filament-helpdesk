@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
 use Nphuonha\FilamentHelpdesk\Models\TicketMessage;
@@ -48,8 +49,10 @@ class TicketReplyNotification extends Notification implements ShouldQueue
             ->mailer(config('filament-helpdesk.mailer'))
             ->from($fromEmail, $fromName)
             ->subject($subject)
-            ->line($body)
-            ->action('View Ticket', url('/helpdesk/tickets/' . $this->ticket->uuid));
+            ->view('filament-helpdesk::emails.simple', [
+                'body' => $body,
+                'subject' => $subject
+            ]);
     }
 
     protected function replacePlaceholders(string $text): string

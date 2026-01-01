@@ -152,6 +152,7 @@ class HelpdeskServiceProvider extends PackageServiceProvider
     {
         return [
             'create_helpdesk_tables',
+            'add_message_id_to_helpdesk_messages_table',
         ];
     }
 }
