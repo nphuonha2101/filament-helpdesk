@@ -4,6 +4,7 @@ namespace Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\RelationMa
 
 use Filament\Forms;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Actions;
@@ -29,7 +30,7 @@ class MessagesRelationManager extends RelationManager
                     ->placeholder('Select a template (optional)')
                     ->columnSpanFull()
                     ->live()
-                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                    ->afterStateUpdated(function ($state, Set $set) {
                         $template = EmailTemplate::find($state);
                         if ($template) {
                             $set('body', $template->body_template);
