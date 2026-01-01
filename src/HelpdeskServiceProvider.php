@@ -80,6 +80,12 @@ class HelpdeskServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
+        // Event Listeners
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Notifications\Events\NotificationSent::class,
+            \Nphuonha\FilamentHelpdesk\Listeners\MarkEmailAsSent::class
+        );
+
         // Handle Stubs
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
@@ -153,6 +159,7 @@ class HelpdeskServiceProvider extends PackageServiceProvider
         return [
             'create_helpdesk_tables',
             'add_message_id_to_helpdesk_messages_table',
+            'add_email_status_to_helpdesk_messages_table',
         ];
     }
 }
