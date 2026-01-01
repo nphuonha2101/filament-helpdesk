@@ -26,7 +26,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ticket_id')->constrained('helpdesk_tickets')->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->text('body');
+            $table->longText('body');
             $table->json('attachments')->nullable();
             $table->boolean('is_admin_reply')->default(false);
             $table->timestamps();
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('subject_template');
-            $table->text('body_template');
+            $table->longText('body_template');
             $table->timestamps();
         });
     }

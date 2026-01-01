@@ -5,6 +5,8 @@ namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Actions;
@@ -30,22 +32,44 @@ class EmailTemplateResource extends Resource
     {
         return $schema
             ->schema([
-                Section::make()
+                Grid::make(2)
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('subject_template')
-                            ->required()
-                            ->maxLength(255)
-                            ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
-                        Forms\Components\Textarea::make('body_template')
-                            ->required()
-                            ->rows(10)
-                            ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
-                            ->columnSpanFull(),
-                    ])
-                    ->columns(2),
+                        Section::make('Template Details')
+                            ->columnSpan(1)
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('subject_template')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->live(debounce: 500)
+                                    ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
+                                Forms\Components\RichEditor::make('body_template')
+                                    ->required()
+                                    ->live(debounce: 500)
+                                    ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
+                                    ->columnSpanFull(),
+                            ]),
+                        Section::make('Live Preview')
+                            ->columnSpan(1)
+                            ->schema([
+                                Forms\Components\Placeholder::make('preview_subject')
+                                    ->label('Subject Preview')
+                                    ->content(fn (Get $get) => str_replace(
+                                        ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                        ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                        $get('subject_template') ?? ''
+                                    )),
+                                Forms\Components\Placeholder::make('preview_body')
+                                    ->label('Body Preview')
+                                    ->content(fn (Get $get) => new \Illuminate\Support\HtmlString(str_replace(
+                                        ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                        ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                        $get('body_template') ?? ''
+                                    ))),
+                            ]),
+                    ]),
             ]);
     }
 

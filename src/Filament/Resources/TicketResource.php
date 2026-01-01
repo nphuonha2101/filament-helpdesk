@@ -57,7 +57,8 @@ class TicketResource extends Resource
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 
