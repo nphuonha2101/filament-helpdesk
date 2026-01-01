@@ -12,11 +12,13 @@ return new class extends Migration
             $table->id();
             $table->string('uuid')->unique()->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('assigned_to_user_id')->nullable()->index();
             $table->string('email')->nullable();
             $table->string('received_at_email')->nullable();
             $table->string('subject');
             $table->string('status')->default('open');
             $table->string('priority')->default('normal');
+            $table->string('channel')->default('web');
             $table->timestamps();
         });
 
