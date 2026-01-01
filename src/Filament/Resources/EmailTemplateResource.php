@@ -32,10 +32,10 @@ class EmailTemplateResource extends Resource
     {
         return $schema
             ->schema([
-                Grid::make(2)
+                Grid::make(3)
                     ->schema([
                         Section::make('Template Details')
-                            ->columnSpan(1)
+                            ->columnSpan(2)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->required()
@@ -49,25 +49,32 @@ class EmailTemplateResource extends Resource
                                     ->required()
                                     ->live(debounce: 500)
                                     ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
-                                    ->columnSpanFull(),
+                                    ->columnSpanFull()
+                                    ->disableToolbarButtons(['attachFiles']),
                             ]),
                         Section::make('Live Preview')
                             ->columnSpan(1)
                             ->schema([
                                 Forms\Components\Placeholder::make('preview_subject')
                                     ->label('Subject Preview')
-                                    ->content(fn (Get $get) => str_replace(
-                                        ['{ticket_id}', '{subject}', '{status}', '{body}'],
-                                        ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
-                                        $get('subject_template') ?? ''
-                                    )),
+                                    ->content(fn (Get $get) => $get('subject_template') 
+                                        ? str_replace(
+                                            ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                            ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                            $get('subject_template')
+                                        ) 
+                                        : new \Illuminate\Support\HtmlString('<span class="text-gray-400 italic">Start typing to see preview...</span>')
+                                    ),
                                 Forms\Components\Placeholder::make('preview_body')
                                     ->label('Body Preview')
-                                    ->content(fn (Get $get) => new \Illuminate\Support\HtmlString(str_replace(
-                                        ['{ticket_id}', '{subject}', '{status}', '{body}'],
-                                        ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
-                                        $get('body_template') ?? ''
-                                    ))),
+                                    ->content(fn (Get $get) => new \Illuminate\Support\HtmlString($get('body_template') 
+                                        ? str_replace(
+                                            ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                            ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                            $get('body_template')
+                                        ) 
+                                        : '<span class="text-gray-400 italic">Start typing to see preview...</span>'
+                                    )),
                             ]),
                     ]),
             ]);

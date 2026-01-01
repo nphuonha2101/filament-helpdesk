@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Nphuonha\FilamentHelpdesk\Notifications\TicketReplyNotification;
+use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 
 class MessagesRelationManager extends RelationManager
 {
@@ -20,9 +21,23 @@ class MessagesRelationManager extends RelationManager
     {
         return $schema
             ->schema([
-                Forms\Components\Textarea::make('body')
+                Forms\Components\Select::make('template_id')
+                    ->label('Email Template')
+                    ->options(EmailTemplate::pluck('name', 'id'))
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Select a template (optional)')
+                    ->columnSpanFull()
+                    ->reactive() // or live()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        // Optional: if you want to pre-fill the body based on template
+                        // $template = EmailTemplate::find($state);
+                        // if ($template) {
+                        //     $set('body', $template->body_template);
+                        // }
+                    }),
+                Forms\Components\RichEditor::make('body')
                     ->required()
-                    ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('attachments')
                     ->multiple()
@@ -52,14 +67,18 @@ class MessagesRelationManager extends RelationManager
             ->headerActions([
                 Actions\CreateAction::make()
                     ->label('Reply')
-                    ->after(function ($record) {
+                    ->after(function ($record, array $data) {
                         // Send notification to the ticket owner
                         $ticket = $record->ticket;
+                        
+                        $templateId = $data['template_id'] ?? null;
+                        $template = $templateId ? EmailTemplate::find($templateId) : null;
+
                         if ($ticket->email) {
                             Notification::route('mail', $ticket->email)
-                                ->notify(new TicketReplyNotification($ticket, $record));
+                                ->notify(new TicketReplyNotification($ticket, $record, $template));
                         } elseif ($ticket->user) {
-                            $ticket->user->notify(new TicketReplyNotification($ticket, $record));
+                            $ticket->user->notify(new TicketReplyNotification($ticket, $record, $template));
                         }
                     }),
             ])

@@ -16,7 +16,8 @@ class TicketReplyNotification extends Notification implements ShouldQueue
 
     public function __construct(
         public Ticket $ticket,
-        public TicketMessage $message
+        public TicketMessage $message,
+        public ?EmailTemplate $template = null
     ) {}
 
     public function via($notifiable): array
@@ -26,8 +27,8 @@ class TicketReplyNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
-        // Try to find a template (e.g. 'ticket_reply')
-        $template = EmailTemplate::where('name', 'ticket_reply')->first();
+        // Use passed template, or try to find default 'ticket_reply'
+        $template = $this->template ?? EmailTemplate::where('name', 'ticket_reply')->first();
 
         $subject = $template
             ? $this->replacePlaceholders($template->subject_template)
