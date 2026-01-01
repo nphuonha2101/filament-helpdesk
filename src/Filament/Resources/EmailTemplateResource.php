@@ -32,10 +32,11 @@ class EmailTemplateResource extends Resource
     {
         return $schema
             ->schema([
-                Grid::make(3)
+                Grid::make(2)
+                    ->columnSpanFull()
                     ->schema([
                         Section::make('Template Details')
-                            ->columnSpan(2)
+                            ->columnSpan(1)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->required()
@@ -49,8 +50,9 @@ class EmailTemplateResource extends Resource
                                     ->required()
                                     ->live(debounce: 500)
                                     ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
-                                    ->columnSpanFull()
-                                    ->disableToolbarButtons(['attachFiles']),
+                                    ->disableToolbarButtons(['attachFiles'])
+                                    ->fileAttachmentsDisk(null)
+                                    ->fileAttachmentsDirectory(null),
                             ]),
                         Section::make('Live Preview')
                             ->columnSpan(1)
