@@ -36,7 +36,7 @@ class MessagesRelationManager extends RelationManager
                             $ticket = $livewire->getOwnerRecord();
                             $body = str_replace(
                                 ['{ticket_id}', '{subject}', '{status}'],
-                                [$ticket->id, $ticket->subject, $ticket->status->value ?? $ticket->status],
+                                [$ticket->id, $ticket->subject, $ticket->status->getLabel() ?? (string) $ticket->status],
                                 $template->body_template
                             );
                             $set('body', $body);

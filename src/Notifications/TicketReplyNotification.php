@@ -54,7 +54,12 @@ class TicketReplyNotification extends Notification implements ShouldQueue
     {
         return str_replace(
             ['{ticket_id}', '{subject}', '{status}', '{body}'],
-            [$this->ticket->id, $this->ticket->subject, $this->ticket->status, $this->message->body],
+            [
+                $this->ticket->id, 
+                $this->ticket->subject, 
+                $this->ticket->status->getLabel() ?? (string) $this->ticket->status, 
+                $this->message->body
+            ],
             $text
         );
     }
