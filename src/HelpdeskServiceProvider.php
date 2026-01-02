@@ -111,8 +111,8 @@ class HelpdeskServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('filament-helpdesk', __DIR__ . '/../resources/dist/components/filament-helpdesk.js'),
-            Css::make('filament-helpdesk-styles', __DIR__ . '/../resources/dist/filament-helpdesk.css'),
-            Js::make('filament-helpdesk-scripts', __DIR__ . '/../resources/dist/filament-helpdesk.js'),
+            // Css::make('filament-helpdesk-styles', __DIR__ . '/../resources/dist/filament-helpdesk.css'),
+            // Js::make('filament-helpdesk-scripts', __DIR__ . '/../resources/dist/filament-helpdesk.js'),
         ];
     }
 
