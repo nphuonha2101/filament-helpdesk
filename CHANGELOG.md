@@ -2,6 +2,11 @@
 
 All notable changes to `nphuonha/filament-helpdesk` will be documented in this file.
 
+## v2.1.6 - 2026-01-02
+
+### Changes
+- Remove un-necessary files 
+
 ## v2.1.5 - 2026-01-01
 
 ### Fixed
