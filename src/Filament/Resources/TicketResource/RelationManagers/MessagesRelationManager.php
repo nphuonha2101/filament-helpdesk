@@ -3,11 +3,8 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Actions;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -18,19 +15,18 @@ class MessagesRelationManager extends RelationManager
 {
     protected static string $relationship = 'messages';
 
-    public function form(Schema $schema): Schema
+    public function form(Forms\Form $form): Forms\Form
     {
-        return $schema
+        return $form
             ->schema([
                 Forms\Components\Select::make('template_id')
-                    ->label('Email Template')
                     ->options(EmailTemplate::pluck('name', 'id'))
                     ->searchable()
                     ->preload()
                     ->placeholder('Select a template (optional)')
                     ->columnSpanFull()
                     ->live()
-                    ->afterStateUpdated(function ($state, Set $set, $livewire) {
+                    ->afterStateUpdated(function ($state, $set, $livewire) {
                         $template = EmailTemplate::find($state);
                         if ($template) {
                             $ticket = $livewire->getOwnerRecord();
@@ -76,7 +72,7 @@ class MessagesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Actions\CreateAction::make()
+                Tables\Actions\CreateAction::make()
                     ->label('Reply')
                     ->after(function ($record, array $data) {
                         // Send notification to the ticket owner
@@ -95,7 +91,7 @@ class MessagesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Actions\Action::make('retry_email')
+                Tables\Actions\Action::make('retry_email')
                     ->label('Retry Send')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')

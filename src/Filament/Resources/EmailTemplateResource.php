@@ -3,13 +3,8 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Actions;
 use Filament\Tables\Table;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource\Pages;
 use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
@@ -28,14 +23,14 @@ class EmailTemplateResource extends Resource
         return 'Helpdesk';
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(Forms\Form $form): Forms\Form
     {
-        return $schema
+        return $form
             ->schema([
-                Grid::make(2)
+                Forms\Components\Grid::make(2)
                     ->columnSpanFull()
                     ->schema([
-                        Section::make('Template Details')
+                        Forms\Components\Section::make('Template Details')
                             ->columnSpan(1)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
@@ -44,22 +39,21 @@ class EmailTemplateResource extends Resource
                                 Forms\Components\TextInput::make('subject_template')
                                     ->required()
                                     ->maxLength(255)
-                                    ->live(debounce: 500)
+                                    ->live()
                                     ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
                                 Forms\Components\RichEditor::make('body_template')
                                     ->required()
-                                    ->live(debounce: 500)
+                                    ->live()
                                     ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
                                     ->disableToolbarButtons(['attachFiles'])
                                     ->fileAttachmentsDisk(null)
                                     ->fileAttachmentsDirectory(null),
                             ]),
-                        Section::make('Live Preview')
+                        Forms\Components\Section::make('Live Preview')
                             ->columnSpan(1)
                             ->schema([
                                 Forms\Components\Placeholder::make('preview_subject')
-                                    ->label('Subject Preview')
-                                    ->content(fn (Get $get) => $get('subject_template') 
+                                    ->content(fn ($get) => $get('subject_template') 
                                         ? str_replace(
                                             ['{ticket_id}', '{subject}', '{status}', '{body}'],
                                             ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
@@ -68,8 +62,7 @@ class EmailTemplateResource extends Resource
                                         : new \Illuminate\Support\HtmlString('<span class="text-gray-400 italic">Start typing to see preview...</span>')
                                     ),
                                 Forms\Components\Placeholder::make('preview_body')
-                                    ->label('Body Preview')
-                                    ->content(fn (Get $get) => new \Illuminate\Support\HtmlString($get('body_template') 
+                                    ->content(fn ($get) => new \Illuminate\Support\HtmlString($get('body_template') 
                                         ? str_replace(
                                             ['{ticket_id}', '{subject}', '{status}', '{body}'],
                                             ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
@@ -99,11 +92,11 @@ class EmailTemplateResource extends Resource
                 //
             ])
             ->actions([
-                Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

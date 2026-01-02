@@ -5,7 +5,6 @@ namespace Nphuonha\FilamentHelpdesk\Livewire;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -24,35 +23,38 @@ class SubmitTicket extends Component implements HasForms
         $this->form->fill();
     }
 
-    public function form(Form $form): Form
+    protected function getFormSchema(): array
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required(fn () => ! Auth::check())
-                    ->hidden(fn () => Auth::check())
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('subject')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('priority')
-                    ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
-                    ->default(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::Normal)
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('message')
-                    ->required()
-                    ->rows(5)
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('attachments')
-                    ->multiple()
-                    ->maxFiles(5)
-                    ->columnSpanFull(),
-            ])
-            ->statePath('data');
+        return [
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->required(fn () => ! Auth::check())
+                ->hidden(fn () => Auth::check())
+                ->maxLength(255)
+                ->columnSpanFull(),
+            Forms\Components\TextInput::make('subject')
+                ->required()
+                ->maxLength(255)
+                ->columnSpanFull(),
+            Forms\Components\Select::make('priority')
+                ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
+                ->default(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::Normal)
+                ->required()
+                ->columnSpanFull(),
+            Forms\Components\Textarea::make('message')
+                ->required()
+                ->rows(5)
+                ->columnSpanFull(),
+            Forms\Components\FileUpload::make('attachments')
+                ->multiple()
+                ->maxFiles(5)
+                ->columnSpanFull(),
+        ];
+    }
+
+    protected function getFormStatePath(): string
+    {
+        return 'data';
     }
 
     public function create(): void

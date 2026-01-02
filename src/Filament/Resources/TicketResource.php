@@ -3,11 +3,8 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Actions;
 use Filament\Tables\Table;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
@@ -26,11 +23,11 @@ class TicketResource extends Resource
         return 'Helpdesk';
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(Forms\Form $form): Forms\Form
     {
-        return $schema
+        return $form
             ->schema([
-                Section::make()
+                Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('subject')
                             ->required()
@@ -93,16 +90,16 @@ class TicketResource extends Resource
                     ->query(fn ($query) => $query->where('assigned_to_user_id', auth()->id())),
             ])
             ->actions([
-                Actions\Action::make('assign_to_me')
+                Tables\Actions\Action::make('assign_to_me')
                     ->label('Assign to Me')
                     ->icon('heroicon-o-user')
                     ->action(fn (Ticket $record) => $record->update(['assigned_to_user_id' => auth()->id()]))
                     ->visible(fn (Ticket $record) => $record->assigned_to_user_id !== auth()->id()),
-                Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
