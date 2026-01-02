@@ -13,3 +13,4 @@ phpstan.neon
 testbench.yaml
 vendor
 resources/dist/filament-helpdesk.js
+resources/dist/filament-helpdesk.css

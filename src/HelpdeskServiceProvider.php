@@ -80,6 +80,12 @@ class HelpdeskServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
+        // Event Listeners
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Notifications\Events\NotificationSent::class,
+            \Nphuonha\FilamentHelpdesk\Listeners\MarkEmailAsSent::class
+        );
+
         // Handle Stubs
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
@@ -105,8 +111,8 @@ class HelpdeskServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('filament-helpdesk', __DIR__ . '/../resources/dist/components/filament-helpdesk.js'),
-            Css::make('filament-helpdesk-styles', __DIR__ . '/../resources/dist/filament-helpdesk.css'),
-            Js::make('filament-helpdesk-scripts', __DIR__ . '/../resources/dist/filament-helpdesk.js'),
+            // Css::make('filament-helpdesk-styles', __DIR__ . '/../resources/dist/filament-helpdesk.css'),
+            // Js::make('filament-helpdesk-scripts', __DIR__ . '/../resources/dist/filament-helpdesk.js'),
         ];
     }
 
@@ -152,8 +158,8 @@ class HelpdeskServiceProvider extends PackageServiceProvider
     {
         return [
             'create_helpdesk_tables',
-            'add_assigned_to_user_id_to_helpdesk_tickets_table',
-            'add_channel_to_helpdesk_tickets_table',
+            'add_message_id_to_helpdesk_messages_table',
+            'add_email_status_to_helpdesk_messages_table',
         ];
     }
 }

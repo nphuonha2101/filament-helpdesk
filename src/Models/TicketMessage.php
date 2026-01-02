@@ -18,11 +18,17 @@ class TicketMessage extends Model
         'body',
         'attachments',
         'is_admin_reply',
+        'message_id',
+        'email_sent',
+        'email_error',
+        'email_sent_at',
     ];
 
     protected $casts = [
         'attachments' => 'array',
         'is_admin_reply' => 'boolean',
+        'email_sent' => 'boolean',
+        'email_sent_at' => 'datetime',
     ];
 
     public function ticket(): BelongsTo

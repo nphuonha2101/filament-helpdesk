@@ -7,10 +7,21 @@ A complete Helpdesk solution for Filament, featuring ticket management, email in
 - **Ticket Management**: Full CRUD interface for managing support tickets within the Filament Admin Panel.
 - **Public Submission Form**: A Livewire component to allow guests and authenticated users to submit tickets from your frontend.
 - **Email Integration**:
-    - **Incoming (IMAP)**: Fetch emails via IMAP and automatically convert them into tickets or replies.
-    - **Incoming (Webhooks)**: Support for incoming mail webhooks (e.g., Mailgun).
+    - **Incoming (IMAP)**: Fetch emails via IMAP with smart threading, deduplication, and automatic ticket assignment.
+    - **Email Threading**: Supports `In-Reply-To` and `References` headers for proper conversation threading.
+    - **Noreply Filtering**: Automatically ignores emails from noreply addresses.
+    - **Incoming (Webhooks)**: Support for incoming mail webhooks (e.g., Mailgun, AWS SES).
     - **Outgoing**: Automated email notifications to users when admins reply to tickets.
-- **Email Templates**: Customizable email templates for auto-responses and replies.
+    - **Email Status Tracking**: Track email delivery status (sent/failed) with automatic retry capability.
+- **Email Templates**: 
+    - Customizable email templates with live preview.
+    - Support for placeholders: `{ticket_id}`, `{subject}`, `{status}`, `{body}`.
+    - Template selection when replying to tickets.
+- **Smart Email Processing**:
+    - Message-ID tracking for duplicate prevention.
+    - Oldest-first processing to ensure proper threading.
+    - Chunked fetching with progress bars for performance.
+- **Retry Mechanism**: Failed email notifications can be retried with one click.
 - **Filament v4 Ready**: Built using the latest Filament standards, including Enums for status and priority management.
 
 ## Requirements
@@ -62,6 +73,16 @@ Then, schedule the fetch command in your `app/Console/Kernel.php` (or using Lara
 $schedule->command('helpdesk:fetch-mail')->everyMinute();
 ```
 
+**IMAP Command Options:**
+
+```bash
+# Fetch with custom limits
+php artisan helpdesk:fetch-mail --max=50 --chunk=10
+
+# --max: Maximum emails to process (default: 100)
+# --chunk: Number of emails per batch (default: 20)
+```
+
 ### 2. Webhook Configuration (Optional)
 
 To receive emails via Webhook (e.g., Mailgun), configure your email provider to POST to the following URL:
@@ -85,8 +106,25 @@ By default, the package uses `App\Models\User`. If you use a different model for
 ### Admin Panel
 
 After installation, the **Helpdesk** section will appear in your Filament Admin Panel.
-- **Tickets**: View, filter, and reply to support tickets.
-- **Email Templates**: Create and manage templates for outgoing emails.
+
+#### Tickets
+- View, filter, and reply to support tickets.
+- Assign tickets to specific agents.
+- Filter by "My Tickets" to see only tickets assigned to you.
+- Track email delivery status for each admin reply.
+- Retry failed email notifications with one click.
+
+#### Email Templates
+- Create and manage templates for outgoing emails.
+- Live preview with placeholder replacement.
+- Use placeholders: `{ticket_id}`, `{subject}`, `{status}`, `{body}`.
+- Select templates when replying to tickets for quick responses.
+
+#### Email Status Tracking
+- Each admin reply shows email delivery status (✓ sent / ✗ failed).
+- Failed emails display error message on hover.
+- One-click retry for failed notifications.
+- Automatic status updates via queue jobs and event listeners.
 
 ### Public Ticket Form
 

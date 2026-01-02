@@ -3,9 +3,11 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
 use Filament\Tables\Table;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\TicketResource\Pages;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
@@ -24,11 +26,11 @@ class TicketResource extends Resource
         return 'Helpdesk';
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make()
+                Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('subject')
                             ->required()
@@ -37,11 +39,13 @@ class TicketResource extends Resource
 
                         Forms\Components\Select::make('status')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketStatus::class)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
 
                         Forms\Components\Select::make('priority')
                             ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
 
                         Forms\Components\Select::make('assigned_to_user_id')
                             ->relationship('assignedTo', 'name')
@@ -53,7 +57,8 @@ class TicketResource extends Resource
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -88,16 +93,16 @@ class TicketResource extends Resource
                     ->query(fn ($query) => $query->where('assigned_to_user_id', auth()->id())),
             ])
             ->actions([
-                Tables\Actions\Action::make('assign_to_me')
+                Actions\Action::make('assign_to_me')
                     ->label('Assign to Me')
                     ->icon('heroicon-o-user')
                     ->action(fn (Ticket $record) => $record->update(['assigned_to_user_id' => auth()->id()]))
                     ->visible(fn (Ticket $record) => $record->assigned_to_user_id !== auth()->id()),
-                Tables\Actions\EditAction::make(),
+                Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

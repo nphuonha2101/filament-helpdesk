@@ -6,17 +6,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\HtmlString;
 use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
 use Nphuonha\FilamentHelpdesk\Models\Ticket;
 use Nphuonha\FilamentHelpdesk\Models\TicketMessage;
 
 class TicketReplyNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, InteractsWithQueue;
 
     public function __construct(
         public Ticket $ticket,
-        public TicketMessage $message
+        public TicketMessage $message,
+        public ?EmailTemplate $template = null
     ) {}
 
     public function via($notifiable): array
@@ -26,16 +29,14 @@ class TicketReplyNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
-        // Try to find a template (e.g. 'ticket_reply')
-        $template = EmailTemplate::where('name', 'ticket_reply')->first();
+        // Mark as attempting to send
+        $this->message->update(['email_sent' => false, 'email_error' => null]);
 
-        $subject = $template
-            ? $this->replacePlaceholders($template->subject_template)
+        $subject = $this->template
+            ? $this->replacePlaceholders($this->template->subject_template)
             : "Re: [#{$this->ticket->id}] {$this->ticket->subject}";
-
-        $body = $template
-            ? $this->replacePlaceholders($template->body_template)
-            : $this->message->body;
+        
+        $body = $this->message->body;
 
         $fromEmail = config('filament-helpdesk.enable_dynamic_sender') && $this->ticket->received_at_email
             ? $this->ticket->received_at_email
@@ -47,15 +48,49 @@ class TicketReplyNotification extends Notification implements ShouldQueue
             ->mailer(config('filament-helpdesk.mailer'))
             ->from($fromEmail, $fromName)
             ->subject($subject)
-            ->line($body)
-            ->action('View Ticket', url('/helpdesk/tickets/' . $this->ticket->uuid));
+            ->view('filament-helpdesk::emails.simple', [
+                'body' => $body,
+                'subject' => $subject
+            ]);
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        $this->message->update([
+            'email_sent' => false,
+            'email_error' => $exception->getMessage(),
+        ]);
+    }
+
+    /**
+     * The job was processed successfully.
+     */
+    public function viaQueues(): array
+    {
+        return ['mail' => 'default'];
+    }
+
+    /**
+     * Determine if notification should be sent.
+     */
+    public function shouldSend($notifiable, $channel): bool
+    {
+        return true;
     }
 
     protected function replacePlaceholders(string $text): string
     {
         return str_replace(
             ['{ticket_id}', '{subject}', '{status}', '{body}'],
-            [$this->ticket->id, $this->ticket->subject, $this->ticket->status, $this->message->body],
+            [
+                $this->ticket->id, 
+                $this->ticket->subject, 
+                $this->ticket->status->getLabel() ?? (string) $this->ticket->status, 
+                $this->message->body
+            ],
             $text
         );
     }

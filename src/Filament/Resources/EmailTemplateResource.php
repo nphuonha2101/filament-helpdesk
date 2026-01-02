@@ -3,9 +3,13 @@
 namespace Nphuonha\FilamentHelpdesk\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
 use Filament\Tables\Table;
 use Nphuonha\FilamentHelpdesk\Filament\Resources\EmailTemplateResource\Pages;
 use Nphuonha\FilamentHelpdesk\Models\EmailTemplate;
@@ -24,26 +28,57 @@ class EmailTemplateResource extends Resource
         return 'Helpdesk';
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make()
+                Grid::make(2)
+                    ->columnSpanFull()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('subject_template')
-                            ->required()
-                            ->maxLength(255)
-                            ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
-                        Forms\Components\Textarea::make('body_template')
-                            ->required()
-                            ->rows(10)
-                            ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
-                            ->columnSpanFull(),
-                    ])
-                    ->columns(2),
+                        Section::make('Template Details')
+                            ->columnSpan(1)
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('subject_template')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->live(debounce: 500)
+                                    ->helperText('Use {ticket_id}, {subject}, {status} as placeholders.'),
+                                Forms\Components\RichEditor::make('body_template')
+                                    ->required()
+                                    ->live(debounce: 500)
+                                    ->helperText('Use {ticket_id}, {subject}, {status}, {body} as placeholders.')
+                                    ->disableToolbarButtons(['attachFiles'])
+                                    ->fileAttachmentsDisk(null)
+                                    ->fileAttachmentsDirectory(null),
+                            ]),
+                        Section::make('Live Preview')
+                            ->columnSpan(1)
+                            ->schema([
+                                Forms\Components\Placeholder::make('preview_subject')
+                                    ->label('Subject Preview')
+                                    ->content(fn (Get $get) => $get('subject_template') 
+                                        ? str_replace(
+                                            ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                            ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                            $get('subject_template')
+                                        ) 
+                                        : new \Illuminate\Support\HtmlString('<span class="text-gray-400 italic">Start typing to see preview...</span>')
+                                    ),
+                                Forms\Components\Placeholder::make('preview_body')
+                                    ->label('Body Preview')
+                                    ->content(fn (Get $get) => new \Illuminate\Support\HtmlString($get('body_template') 
+                                        ? str_replace(
+                                            ['{ticket_id}', '{subject}', '{status}', '{body}'],
+                                            ['#12345', 'Sample Ticket', 'Open', 'This is a sample ticket body.'],
+                                            $get('body_template')
+                                        ) 
+                                        : '<span class="text-gray-400 italic">Start typing to see preview...</span>'
+                                    )),
+                            ]),
+                    ]),
             ]);
     }
 
@@ -64,11 +99,11 @@ class EmailTemplateResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

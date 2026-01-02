@@ -32,20 +32,25 @@ class SubmitTicket extends Component implements HasForms
                     ->email()
                     ->required(fn () => ! Auth::check())
                     ->hidden(fn () => Auth::check())
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('subject')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\Select::make('priority')
                     ->options(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::class)
                     ->default(\Nphuonha\FilamentHelpdesk\Enums\TicketPriority::Normal)
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('message')
                     ->required()
-                    ->rows(5),
+                    ->rows(5)
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('attachments')
                     ->multiple()
-                    ->maxFiles(5),
+                    ->maxFiles(5)
+                    ->columnSpanFull(),
             ])
             ->statePath('data');
     }
